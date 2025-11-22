@@ -21,7 +21,7 @@ class ParticipantController extends Controller
      */
     public function create()
     {
-        //
+        return view('participants.create');
     }
 
     /**
@@ -29,7 +29,15 @@ class ParticipantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:participants,email',
+            'phone_number' => 'required|string|max:20',
+            'address' => 'required|string',
+        ]);
+
+        Participant::create($validated);
+        return redirect()->route('participants.index');
     }
 
     /**
@@ -45,7 +53,8 @@ class ParticipantController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $participant = Participant::findOrFail($id);
+        return view('participants.edit', compact('participant'));
     }
 
     /**
@@ -53,7 +62,17 @@ class ParticipantController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $participant = Participant::findOrFail($id);
+
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:participants,email,' . $id . ',participant_id',
+            'phone_number' => 'required|string|max:20',
+            'address' => 'required|string',
+        ]);
+
+        $participant->update($validated);
+        return redirect()->route('participants.index');
     }
 
     /**
@@ -61,6 +80,8 @@ class ParticipantController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $participant = Participant::findOrFail($id);
+        $participant->delete();
+        return redirect()->route('participants.index');
     }
 }

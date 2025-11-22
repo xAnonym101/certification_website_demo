@@ -27,6 +27,6 @@ class Course extends Model
             'course_participants', 
             'course_id', 
             'participant_id'
-        )->withPivot('registration_date', 'participant_course_id');
+        )->withPivot('registration_date', 'course_participant_id');
     }
 }
