@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // The code to migrate weak entity table connecting participants and courses
         Schema::create('course_participants', function (Blueprint $table) {
             $table->id("course_participant_id");
 
-            // Foreign Key (FK)
+            // Foreign Key (FK) from Primary Key of participants and courses
             $table->foreignId("participant_id")->constrained("participants", "participant_id")->onDelete("cascade");
             $table->foreignId("course_id")->constrained("courses","course_id")->onDelete("cascade");
 
+            // Not mandatory
             $table->date("registration_date")->nullable();
+            
             $table->timestamps();
         });
     }

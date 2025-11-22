@@ -10,6 +10,7 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // Default function to get items from database and show the list of courses
     public function index()
     {
         $courses = Course::withCount('participants')->latest('created_at')->get();
@@ -19,6 +20,7 @@ class CourseController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    // Route to create view for courses
     public function create()
     {
         return view('courses.create');
@@ -27,6 +29,8 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // 
+    // Data that was created from create view will be stored to database using this function
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -44,6 +48,7 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      */
+    // This function is specifically to show details of a chosen item
     public function show(string $id)
     {
         $course = Course::with('participants')->findOrFail($id);
@@ -55,6 +60,7 @@ class CourseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    // Function to get a chosen item and reroute to edit view
     public function edit(string $id)
     {
         $course = Course::findOrFail($id);
@@ -64,6 +70,7 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // Function to update the chosen item that is used when submitting edit
     public function update(Request $request, string $id)
     {
         $course = Course::findOrFail($id);
@@ -83,6 +90,7 @@ class CourseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // Delete function to chosen item
     public function destroy(string $id)
     {
         $course = Course::findOrFail($id);
@@ -91,8 +99,9 @@ class CourseController extends Controller
     }
 
     /**
-     * Custom classes
+     * Custom functions that are used in the showDetail for course
      */
+    // Custom function to pick a specific participant to a specific course known as "enroll a course"
     public function enroll(Request $request, $course_id)
     {
         $course = Course::findOrFail($course_id);
@@ -108,6 +117,7 @@ class CourseController extends Controller
         return redirect()->route('courses.show', $course_id)->with('success', 'Student enrolled successfully!');
     }
 
+    // Custom function to remove a specific participant from a specific course
     public function discharge($course_id, $participant_id)
     {
         $course = Course::findOrFail($course_id);

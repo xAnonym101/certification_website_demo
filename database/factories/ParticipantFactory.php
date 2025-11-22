@@ -14,6 +14,7 @@ class ParticipantFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    // The function serves to give each column their specific random content for the participant model
     public function definition(): array
     {
         return [

@@ -8,10 +8,13 @@ use App\Models\Course;
 
 class Participant extends Model
 {
+    // To create fake data
     use HasFactory;
 
+    // The custom primary key
     protected $primaryKey = 'participant_id';
 
+    // Columns of the data that are fillable
     protected $fillable = [
         'full_name',
         'email',
@@ -19,6 +22,7 @@ class Participant extends Model
         'address'
     ];
 
+    // Defines the function of many-many, must also have one in the Courses.php model
     public function courses()
     {
         return $this->belongsToMany(

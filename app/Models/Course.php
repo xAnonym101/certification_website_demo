@@ -8,10 +8,13 @@ use App\Models\Participant;
 
 class Course extends Model
 {
+    // To create fake data
     use HasFactory;
 
+    // The custom primary key
     protected $primaryKey = 'course_id';
 
+    // Columns of the data that are fillable
     protected $fillable = [
         'course_name',
         'course_description',
@@ -20,6 +23,7 @@ class Course extends Model
         'end_date'
     ];
 
+    // Defines the function of many-many, must also have one in the Participant.php model
     public function participants()
     {
         return $this->belongsToMany(

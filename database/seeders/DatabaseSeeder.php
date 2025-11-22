@@ -8,15 +8,16 @@ use App\Models\Participant;
 
 class DatabaseSeeder extends Seeder
 {
+    // Seeder runs the factory to generate mass amount of data
     public function run(): void
     {
-        // 1. Create 10 Courses
+        // Create 10 Courses
         $courses = Course::factory(10)->create();
 
-        // 2. Create 50 Participants
+        // Create 50 Participants
         $participants = Participant::factory(50)->create();
 
-        // 3. Randomly enroll participants
+        // Randomly enroll participants
         foreach ($participants as $participant) {
             $participant->courses()->attach(
                 $courses->random(rand(1, 3))->pluck('course_id')->toArray(),

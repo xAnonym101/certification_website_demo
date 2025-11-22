@@ -31,6 +31,9 @@
                     <input type="text" name="full_name" id="full_name" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm border p-2"
                         placeholder="e.g. John Doe">
+                    @error('full_name')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -45,6 +48,9 @@
                     <input type="text" name="phone_number" id="phone_number" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm border p-2"
                         placeholder="+62 812...">
+                    @error('phone_number')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
