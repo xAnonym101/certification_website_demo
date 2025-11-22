@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Course;
 
 class Participant extends Model
 {
@@ -25,6 +26,6 @@ class Participant extends Model
             'course_participants',
             'participant_id',
             'course_id'
-        )->withPivot('registration_date', 'participant_course_id');
+        )->withPivot('registration_date', 'course_participant_id');
     }
 }
