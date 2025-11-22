@@ -15,11 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $courses = \App\Models\Course::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $participants = \App\Models\Participant::factory(50)->create();
+
+        foreach ($participants as $participant) {
+            $participant->courses()->attach(
+                $courses->random(rand(1, 3))->pluck('course_id')->toArray(),
+                ['registration_date' => now()]
+            );
+        }
     }
 }
