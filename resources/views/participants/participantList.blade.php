@@ -11,33 +11,7 @@
 
 <body class="bg-gray-100 font-sans text-slate-800">
 
-    <nav class="bg-slate-900 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 font-bold text-xl tracking-wide text-teal-400">
-                        <i class="fas fa-cubes mr-2"></i> SKILL HUB
-                    </div>
-                    <div class="hidden md:flex ml-10 space-x-8">
-                        <a href="/participants"
-                            class="border-b-2 border-teal-400 text-white px-1 py-4 text-sm font-medium">
-                            Participants
-                        </a>
-                        <a href="/courses"
-                            class="border-b-2 border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500 px-1 py-4 text-sm font-medium transition">
-                            Courses
-                        </a>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <div
-                        class="h-8 w-8 rounded bg-teal-500 flex items-center justify-center text-xs font-bold text-white">
-                        AD
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-navbar />
 
     <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
 
