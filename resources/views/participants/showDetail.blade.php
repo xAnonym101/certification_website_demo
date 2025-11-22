@@ -8,8 +8,6 @@
 </head>
 <body class="bg-gray-100 font-sans text-slate-800">
 
-    <x-navbar />
-
     <div class="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
         
         <div class="mb-8 flex items-center justify-between">
