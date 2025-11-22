@@ -45,7 +45,8 @@ class ParticipantController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $participant = Participant::with('courses')->findOrFail($id);
+        return view('participants.showDetail', compact('participant'));
     }
 
     /**
