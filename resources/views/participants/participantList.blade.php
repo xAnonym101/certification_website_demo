@@ -61,10 +61,9 @@
                                         {{ substr($participant->full_name, 0, 1) }}
                                     </div>
                                     <div class="ml-4">
-                                        <a href="{{ route('participants.show', $participant->participant_id) }}"
-                                            class="text-sm font-bold text-slate-900 hover:text-teal-600 hover:underline">
+                                        <div class="text-sm font-bold text-slate-900">
                                             {{ $participant->full_name }}
-                                        </a>
+                                        </div>
                                         <div class="text-xs text-slate-500">Reg:
                                             {{ $participant->created_at->format('d M Y') }}
                                         </div>

@@ -51,8 +51,7 @@ class ParticipantController extends Controller
     // This function is specifically to show details of a chosen item
     public function show(string $id)
     {
-        $participant = Participant::with('courses')->findOrFail($id);
-        return view('participants.showDetail', compact('participant'));
+        //
     }
 
     /**
@@ -62,7 +61,7 @@ class ParticipantController extends Controller
     public function edit(string $id)
     {
         $participant = Participant::findOrFail($id);
-        return view('participants.edit', compact('participant'));
+        return view('participants.showDetail', compact('participant'));
     }
 
     /**
@@ -83,7 +82,7 @@ class ParticipantController extends Controller
         ]);
 
         $participant->update($validated);
-        return redirect()->route('participants.index');
+        return redirect()->route('participants.edit', $id);
     }
 
     /**

@@ -51,10 +51,7 @@ class CourseController extends Controller
     // This function is specifically to show details of a chosen item
     public function show(string $id)
     {
-        $course = Course::with('participants')->findOrFail($id);
-        $existingIds = $course->participants->pluck('participant_id');
-        $availableParticipants = \App\Models\Participant::whereNotIn('participant_id', $existingIds)->get();
-        return view('courses.showDetail', compact('course', 'availableParticipants'));
+        //
     }
 
     /**
@@ -63,8 +60,10 @@ class CourseController extends Controller
     // Function to get a chosen item and reroute to edit view
     public function edit(string $id)
     {
-        $course = Course::findOrFail($id);
-        return view('courses.edit', compact('course'));
+        $course = Course::with('participants')->findOrFail($id);
+        $existingIds = $course->participants->pluck('participant_id');
+        $availableParticipants = \App\Models\Participant::whereNotIn('participant_id', $existingIds)->get();
+        return view('courses.showDetail', compact('course', 'availableParticipants'));
     }
 
     /**
@@ -84,7 +83,7 @@ class CourseController extends Controller
         ]);
 
         $course->update($validated);
-        return redirect()->route('courses.index');
+        return redirect()->route('courses.edit', $id);
     }
 
     /**
@@ -96,32 +95,5 @@ class CourseController extends Controller
         $course = Course::findOrFail($id);
         $course->delete();
         return redirect()->route('courses.index');
-    }
-
-    /**
-     * Custom functions that are used in the showDetail for course
-     */
-    // Custom function to pick a specific participant to a specific course known as "enroll a course"
-    public function enroll(Request $request, $course_id)
-    {
-        $course = Course::findOrFail($course_id);
-
-        $request->validate([
-            'participant_id' => 'required|exists:participants,participant_id'
-        ]);
-
-        $course->participants()->attach($request->participant_id, [
-            'registration_date' => now()
-        ]);
-
-        return redirect()->route('courses.show', $course_id)->with('success', 'Student enrolled successfully!');
-    }
-
-    // Custom function to remove a specific participant from a specific course
-    public function discharge($course_id, $participant_id)
-    {
-        $course = Course::findOrFail($course_id);
-        $course->participants()->detach($participant_id);
-        return redirect()->route('courses.show', $course_id)->with('success', 'Student removed from class.');
     }
 }

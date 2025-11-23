@@ -11,10 +11,11 @@ class SkillHubCompleteTest extends TestCase
 {
     use RefreshDatabase;
 
-    /* -------------------------------------------------------------------------- */
-    /* 1. PARTICIPANT MANAGEMENT                                                  */
-    /* -------------------------------------------------------------------------- */
+    // --------------------------------------------------------------------------
+    // PARTICIPANT MANAGEMENT
+    // -------------------------------------------------------------------------- 
 
+    // Test that a participant can be created with valid data and redirects correctly
     public function test_create_participant()
     {
         $data = [
@@ -30,6 +31,7 @@ class SkillHubCompleteTest extends TestCase
         $this->assertDatabaseHas('participants', ['email' => 'test@student.com']);
     }
 
+    // Test that the participant index page loads and displays created data
     public function test_read_participant_list()
     {
         Participant::factory()->create(['full_name' => 'List Student']);
@@ -39,15 +41,17 @@ class SkillHubCompleteTest extends TestCase
              ->assertSee('List Student');
     }
 
+    // Test that a specific participant's detail page loads correctly (using edit view)
     public function test_read_participant_detail()
     {
         $participant = Participant::factory()->create(['full_name' => 'Detail Student']);
 
-        $this->get("/participants/{$participant->participant_id}")
+        $this->get("/participants/{$participant->participant_id}/edit")
              ->assertStatus(200)
              ->assertSee('Detail Student');
     }
 
+    // Test that participant data can be updated and changes persist in the database
     public function test_update_participant()
     {
         $participant = Participant::factory()->create(['full_name' => 'Old Name']);
@@ -57,11 +61,12 @@ class SkillHubCompleteTest extends TestCase
             'email' => $participant->email,
             'phone_number' => $participant->phone_number,
             'address' => $participant->address,
-        ])->assertRedirect('/participants');
+        ])->assertRedirect(route('participants.edit', $participant->participant_id));
 
         $this->assertDatabaseHas('participants', ['full_name' => 'New Name']);
     }
 
+    // Test that a participant can be deleted and is removed from the database
     public function test_delete_participant()
     {
         $participant = Participant::factory()->create();
@@ -72,10 +77,11 @@ class SkillHubCompleteTest extends TestCase
         $this->assertDatabaseMissing('participants', ['participant_id' => $participant->participant_id]);
     }
 
-    /* -------------------------------------------------------------------------- */
-    /* 2. COURSE MANAGEMENT                                                       */
-    /* -------------------------------------------------------------------------- */
+    // -------------------------------------------------------------------------- 
+    // COURSE MANAGEMENT
+    // -------------------------------------------------------------------------- 
 
+    // Test that a course can be created with valid data
     public function test_create_course()
     {
         $data = [
@@ -92,6 +98,7 @@ class SkillHubCompleteTest extends TestCase
         $this->assertDatabaseHas('courses', ['course_name' => 'Laravel 101']);
     }
 
+    // Test that the course index page loads and displays created data
     public function test_read_course_list()
     {
         Course::factory()->create(['course_name' => 'List Course']);
@@ -101,15 +108,17 @@ class SkillHubCompleteTest extends TestCase
              ->assertSee('List Course');
     }
 
+    // Test that a specific course's detail page loads correctly (using edit view)
     public function test_read_course_detail()
     {
         $course = Course::factory()->create(['course_name' => 'Detail Course']);
 
-        $this->get("/courses/{$course->course_id}")
+        $this->get("/courses/{$course->course_id}/edit")
              ->assertStatus(200)
              ->assertSee('Detail Course');
     }
 
+    // Test that course data can be updated and changes persist in the database
     public function test_update_course()
     {
         $course = Course::factory()->create(['course_name' => 'Old Course']);
@@ -120,11 +129,12 @@ class SkillHubCompleteTest extends TestCase
             'instructor_name' => $course->instructor_name,
             'start_date' => '2025-01-01',
             'end_date' => '2025-02-01',
-        ])->assertRedirect('/courses');
+        ])->assertRedirect(route('courses.edit', $course->course_id));
 
         $this->assertDatabaseHas('courses', ['course_name' => 'New Course']);
     }
 
+    // Test that a course can be deleted and is removed from the database
     public function test_delete_course()
     {
         $course = Course::factory()->create();
@@ -135,16 +145,19 @@ class SkillHubCompleteTest extends TestCase
         $this->assertDatabaseMissing('courses', ['course_id' => $course->course_id]);
     }
 
-    /* -------------------------------------------------------------------------- */
-    /* 3. REGISTRATION MANAGEMENT                                                 */
-    /* -------------------------------------------------------------------------- */
+    // -------------------------------------------------------------------------- 
+    // REGISTRATION (ENROLLMENT CONTROLLER LOGIC)
+    // -------------------------------------------------------------------------- 
 
+    // Test that the enrollment controller action correctly links a participant to a course
     public function test_enroll_student()
     {
         $participant = Participant::factory()->create();
         $course = Course::factory()->create();
 
-        $this->post(route('courses.enroll', $course->course_id), [
+        // Uses the new 'enrollments.store' route
+        $this->post(route('enrollments.store'), [
+            'course_id' => $course->course_id,
             'participant_id' => $participant->participant_id
         ])->assertRedirect();
 
@@ -154,6 +167,7 @@ class SkillHubCompleteTest extends TestCase
         ]);
     }
 
+    // Test that enrollment data appears on both the Course and Participant detail pages
     public function test_enrollment_visibility()
     {
         $participant = Participant::factory()->create(['full_name' => 'Enrolled Student']);
@@ -161,13 +175,15 @@ class SkillHubCompleteTest extends TestCase
         
         $course->participants()->attach($participant->participant_id, ['registration_date' => now()]);
 
-        $this->get("/courses/{$course->course_id}")
+        // Checks the 'edit' route since 'show' is empty in your structure
+        $this->get("/courses/{$course->course_id}/edit")
              ->assertSee('Enrolled Student');
 
-        $this->get("/participants/{$participant->participant_id}")
+        $this->get("/participants/{$participant->participant_id}/edit")
              ->assertSee('Enrolled Course');
     }
 
+    // Test that the discharge controller action correctly removes the link between participant and course
     public function test_drop_student()
     {
         $participant = Participant::factory()->create();
@@ -175,7 +191,8 @@ class SkillHubCompleteTest extends TestCase
         
         $course->participants()->attach($participant->participant_id, ['registration_date' => now()]);
 
-        $this->delete(route('courses.discharge', [
+        // Uses the new 'enrollments.destroy' route
+        $this->delete(route('enrollments.destroy', [
             'course' => $course->course_id, 
             'participant' => $participant->participant_id
         ]))->assertRedirect();

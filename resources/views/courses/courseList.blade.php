@@ -59,10 +59,9 @@
                                         <i class="fas fa-book-open"></i>
                                     </div>
                                     <div class="ml-4">
-                                        <a href="{{ route('courses.show', $course->course_id) }}"
-                                            class="text-sm font-bold text-teal-600 hover:underline hover:text-teal-800">
+                                        <span class="text-sm font-bold text-teal-600">
                                             {{ $course->course_name }}
-                                        </a>
+                                        </span>
                                         <div class="text-xs text-slate-500 truncate w-48"
                                             title="{{ $course->course_description }}">
                                             {{ Str::limit($course->course_description, 40) }}
