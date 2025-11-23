@@ -20,7 +20,7 @@ class ParticipantFactory extends Factory
         return [
             'full_name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone_number' => fake()->phoneNumber(),
+            'phone_number' => fake()->e164PhoneNumber(),
             'address' => fake()->address(),
             'created_at' => now(),
         ];
