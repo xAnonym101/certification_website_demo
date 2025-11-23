@@ -11,13 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // The code to migrate course table
         Schema::create('courses', function (Blueprint $table) {
+            // Custom id name
             $table->id("course_id");
+
+            // Mandatory fillable
             $table->string("course_name");
             $table->text("course_description");
             $table->string("instructor_name");
+
+            // Not mandatory
             $table->date("start_date")->nullable();
             $table->date("end_date")->nullable();
+
             $table->timestamps();
         });
     }

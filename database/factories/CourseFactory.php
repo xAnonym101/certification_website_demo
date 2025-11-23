@@ -14,6 +14,7 @@ class CourseFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    // The function serves to give each column their specific random content
     public function definition(): array
     {
         return [

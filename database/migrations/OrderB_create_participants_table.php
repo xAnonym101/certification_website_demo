@@ -11,12 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // The code to migrate participants table
         Schema::create('participants', function (Blueprint $table) {
+            // Custom id name
             $table->id("participant_id");
+
+            // Mandatory fillable
             $table->string("full_name");
+            // Unique for only 1 exists in the whole database
             $table->string("email")->unique();
             $table->string("phone_number");
             $table->string("address");
+
             $table->timestamps();
         });
     }

@@ -14,12 +14,13 @@ class ParticipantFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    // The function serves to give each column their specific random content for the participant model
     public function definition(): array
     {
         return [
             'full_name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone_number' => fake()->phoneNumber(),
+            'phone_number' => fake()->e164PhoneNumber(),
             'address' => fake()->address(),
             'created_at' => now(),
         ];
